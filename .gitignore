@@ -16,7 +16,8 @@ firebase.json
 .env.*.local
 vue.config.js
 
-
+yarn.lock
+package-lock.json
 # Log files
 npm-debug.log*
 yarn-debug.log*
