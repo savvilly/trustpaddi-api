@@ -1,13 +1,9 @@
 const router = require("express").Router()
-const axios = require('axios')
-const mongoose = require("mongoose")
 const cloudinary = require("../../middleware/cloud")
 const upload = require("../../middleware/multer")
 const checkAuth = require("../../middleware/checkAuth")
 
 const Transaction = require("../../models/Transaction")
-const secret = process.env.PAYSTACK_SECRET_KEY
-axios.defaults.headers.common.Authorization = `Bearer ${secret}`
 
 router.post("/createTransaction", upload.single("image"), checkAuth, async(req, res) => {
     const {
@@ -23,23 +19,20 @@ router.post("/createTransaction", upload.single("image"), checkAuth, async(req, 
         duration,
     } = req.body
 
+    if(!quantity) quantity = 1
+
     let charge = (20 / 100) * price
     let total = Number(charge) + Number(price)
+    total = total * quantity
     try {
         // Upload image to cloudinary
         const result = await cloudinary.uploader.upload(req.file.path, {
             folder: process.env.CLOUDINARY_FOLDER,
         })
-        const payload = {
-            email: recipientEmail,
-            amount: total * 100,
-            callback_url: ''
-          }
-        const { data } = await axios.post(
-            'https://api.paystack.co/transaction/initialize',
-            payload
-          )
-        console.log(data.data.authorization_url)
+
+        // Create payment with paystack
+        const data = await initPay(recipientEmail, total, '')
+
         const transaction = await new Transaction({
             user,
             recipientName,
