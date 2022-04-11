@@ -1,13 +1,14 @@
 
 const axios = require('../config/axios')
 
-exports.initPay = async (email, amount, url) => {
+exports.initPay = async (email, amount, url, metadata) => {
 
   try {
     const payload = {
       email: email,
       amount: amount * 100,
-      callback_url: url
+      callback_url: url,
+      metadata
     }
     const { data } = await axios.post(
         'https://api.paystack.co/transaction/initialize',
@@ -19,6 +20,8 @@ exports.initPay = async (email, amount, url) => {
     throw error
   }
 }
+
+// Customers
 
 exports.createCustomer = async (first_name, last_name, email, phone) => {
 

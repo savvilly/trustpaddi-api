@@ -37,6 +37,7 @@ app.use("/auth", [
 ])
 
 app.use("/states", require("./routes/states"))
+app.use("/banks", require("./routes/banks"))
 
 app.use("/banks", [
     require("./routes/banks/banks"),

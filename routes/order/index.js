@@ -1,5 +1,5 @@
 const router = require("express").Router()
-
+const mongoose = require("mongoose")
 const Order = require("../../models/Order")
 const Product = require("../../models/Product")
 const User = require("../../models/User")
@@ -38,10 +38,20 @@ router.post("/create-order", async(req, res, next) => {
       let charge = (20 / 100) * price
       let totalCost = Number(charge) + Number(price)
 
+      let _id = new mongoose.Types.ObjectId()
+
         // Create payment with paystack
-        const data = await initPay(buyerEmail, totalCost, '')
+        const metadata = {
+					paymentForm: 'Order',
+					orderId: _id,
+          productId: productId,
+					sellerId: sellerId,
+					buyerEmail: buyerEmail,
+        }
+        const data = await initPay(buyerEmail, totalCost, '', metadata)
 
         const order = await new Order({
+          _id,
           productId,
           buyerEmail,
           buyerPhone,

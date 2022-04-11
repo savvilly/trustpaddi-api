@@ -9,3 +9,5 @@ router.get('get-bank',  async (req, res) => {
   const data = getBanks()
   res.send(data)
 })
+
+module.exports = router
