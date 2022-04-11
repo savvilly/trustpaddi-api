@@ -5,8 +5,10 @@ const checkAuth = require("../../middleware/checkAuth")
 
 const Transaction = require("../../models/Transaction")
 
-router.post("/createTransaction", upload.single("image"), checkAuth, async(req, res) => {
-    const {
+const { initPay } = require('../../paystack')
+
+router.post("/createTransaction", upload.single("image"), checkAuth, async(req, res, next) => {
+    let {
         user,
         recipientName,
         recipientEmail,
@@ -56,12 +58,7 @@ router.post("/createTransaction", upload.single("image"), checkAuth, async(req, 
             url: data.data.authorization_url
         })
     } catch (error) {
-        console.log(error)
-        res.status(401).json({
-            success: false,
-            message: "Error creating transaction. Please add an image",
-            error,
-        })
+        next(error)
     }
 })
 

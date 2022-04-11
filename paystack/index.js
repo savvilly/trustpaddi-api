@@ -40,28 +40,67 @@ exports.createCustomer = async (first_name, last_name, email, phone) => {
 }
 
 exports.getCustomers = async () => {
+ try {
   const { data } = await axios.get('https://api.paystack.co/customer')
   return data
+ } catch (error) {
+   throw error
+ }
 }
 
 exports.getCustomer = async (email) => {
-  const { data } = await axios.get(`https://api.paystack.co/customer/:${email}`)
-  return data
+  try {
+    const { data } = await axios.get(`https://api.paystack.co/customer/:${email}`)
+    return data
+  } catch (error) {
+    throw error
+  }
 }
 
-exports.getBanks = async (email) => {
-  const { data } = await axios.get(`https://api.paystack.co/bank/country=nigeria`)
-  return data
+exports.getBanks = async () => {
+  try {
+    const { data } = await axios.get('https://api.paystack.co/bank/country=nigeria')
+    return data
+  } catch (error) {
+    throw error
+  }
 }
 
 exports.updateCustomer = async (first_name, last_name, email, phone, code) => {
-  const payload = {
-    first_name,
-    last_name,
-    email,
-    phone
+  try {
+    const payload = {
+      first_name,
+      last_name,
+      email,
+      phone
+    }
+    
+    const { data } = await axios.put(`https://api.paystack.co/customer/:${code}`, payload)
+    return data
+  } catch (error) {
+    throw error
   }
+}
+
+exports.validiateCustomer = async (first_name, last_name, email, phone, customer_code, bank_code, bvn, account_number) => {
+
+  try {
+    const payload = {
+      first_name,
+      last_name,
+      email,
+      phone,
+      bank_code,
+      country: 'NG',
+      type: "bank_account",
+      bvn,
+      account_number
+    }
   
-  const { data } = await axios.put(`https://api.paystack.co/customer/:${code}`, payload)
-  return data
+    
+    const { data } = await axios.put(`https://api.paystack.co/customer/${customer_code}/identification`, payload)
+    return data
+  } catch (error) {
+    throw error
+  }
 }

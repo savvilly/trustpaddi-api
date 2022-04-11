@@ -74,6 +74,19 @@ app.use("/product", [
     require("./routes/product/updateProduct"),
 ])
 
+app.use("/order", [
+    require("./routes/order"),
+])
+
+// Error handling
+app.use((error, req, res, next) => {
+    const status = error.statusCode || 500
+    const message = error.message
+    const data = error.data
+    console.log(error)
+    res.status(status).json({ message: message, data: data })
+  })
+
 const PORT = process.env.PORT || 8000
 app.listen(
     PORT,
