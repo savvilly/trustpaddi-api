@@ -62,6 +62,7 @@ router.post("/createTransaction", checkAuth, async(req, res, next) => {
             image: 'result.secure_url',
             reference: data.data.reference,
         })
+        await transaction.save()
         res.status(201).json({
             message: "Transaction successfully created",
             success: true,

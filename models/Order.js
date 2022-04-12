@@ -5,6 +5,10 @@ const newOrderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
   },
+  status: {
+    type: String,
+    default: "pending",
+  },
   buyerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -23,10 +27,6 @@ const newOrderSchema = new mongoose.Schema({
   },
   reference: {
     type: String
-  },
-  paymentStatus: {
-    type: String,
-    default: "pending",
   },
   totalCost: {
     type: String,

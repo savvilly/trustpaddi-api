@@ -21,6 +21,19 @@ exports.initPay = async (email, amount, url, metadata) => {
   }
 }
 
+exports.verifyTx = async (reference) => {
+
+  try {
+    const { data } = await axios.get(
+        `https://api.paystack.co/transaction/verify/${reference}`
+      )
+  
+      return data
+  } catch (error) {
+    throw error
+  }
+}
+
 // Customers
 
 exports.createCustomer = async (first_name, last_name, email, phone) => {
@@ -53,7 +66,7 @@ exports.getCustomers = async () => {
 
 exports.getCustomer = async (email) => {
   try {
-    const { data } = await axios.get(`https://api.paystack.co/customer/:${email}`)
+    const { data } = await axios.get(`https://api.paystack.co/customer/${email}`)
     return data
   } catch (error) {
     throw error
@@ -78,7 +91,7 @@ exports.updateCustomer = async (first_name, last_name, email, phone, code) => {
       phone
     }
     
-    const { data } = await axios.put(`https://api.paystack.co/customer/:${code}`, payload)
+    const { data } = await axios.put(`https://api.paystack.co/customer/${code}`, payload)
     return data
   } catch (error) {
     throw error
