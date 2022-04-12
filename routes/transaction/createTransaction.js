@@ -8,7 +8,7 @@ const Transaction = require("../../models/Transaction")
 
 const { initPay } = require('../../paystack')
 
-router.post("/createTransaction", checkAuth, async(req, res, next) => {
+router.post("/createTransaction", upload.single("image"), checkAuth, async(req, res, next) => {
     let {
         user,
         recipientName,
@@ -30,9 +30,9 @@ router.post("/createTransaction", checkAuth, async(req, res, next) => {
     try {
         
         // Upload image to cloudinary
-        // const result = await cloudinary.uploader.upload(req.file.path, {
-        //     folder: process.env.CLOUDINARY_FOLDER,
-        // })
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: process.env.CLOUDINARY_FOLDER,
+        })
             
         let _id = new mongoose.Types.ObjectId()
         // Create payment with paystack
@@ -59,7 +59,7 @@ router.post("/createTransaction", checkAuth, async(req, res, next) => {
             duration,
             charge,
             total,
-            image: 'result.secure_url',
+            image: result.secure_url,
             reference: data.data.reference,
         })
         await transaction.save()
