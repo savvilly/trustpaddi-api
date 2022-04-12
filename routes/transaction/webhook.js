@@ -31,6 +31,7 @@ router.post("/webhook", async (req, res) => {
         const reference = response.data.reference
         const tx = await Transaction.findOne({ reference: reference })
         tx.status = response.data.status
+        await tx.save()
         return
       }
       // Do something with event
