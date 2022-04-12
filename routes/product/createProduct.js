@@ -7,7 +7,7 @@ const checkAuth = require("../../middleware/checkAuth")
 const Product = require("../../models/Product")
 const User = require("../../models/User")
 
-router.post("/createProduct", async(req, res) => {
+router.post("/createProduct", upload.single("image"), checkAuth, async(req, res) => {
     const { user, name, description, quantity, price } = req.body
     let _id = new mongoose.Types.ObjectId()
 
@@ -16,9 +16,9 @@ router.post("/createProduct", async(req, res) => {
 
     try {
         // Upload image to cloudinary
-        // const result = await cloudinary.uploader.upload(req.file.path, {
-        //     folder: process.env.CLOUDINARY_FOLDER,
-        // })
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: process.env.CLOUDINARY_FOLDER,
+        })
 
         let merchant = await User.findOne({ user })
         let product = await Product.create({
@@ -33,7 +33,7 @@ router.post("/createProduct", async(req, res) => {
             link: [user, _id],
             paddiLink: `https://paddiproduct.web.app/${_id}`,
             merchant: [merchant],
-            image: 'result.secure_url',
+            image: result.secure_url,
         })
         return res.status(201).json({
             message: "Product successfully created",
