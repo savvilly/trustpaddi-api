@@ -5,7 +5,7 @@ const mongoose = require("mongoose")
 const checkAuth = require("../../middleware/checkAuth")
 
 const Transaction = require("../../models/Transaction")
-
+const { sendPaymentlinkToRecipientEmail } = require('../../utils/mailjet')
 const { initPay } = require('../../paystack')
 
 router.post("/createTransaction", upload.single("image"), checkAuth, async(req, res, next) => {
@@ -14,6 +14,7 @@ router.post("/createTransaction", upload.single("image"), checkAuth, async(req, 
         recipientName,
         recipientEmail,
         recipientPhone,
+        productName,
         transactionType,
         price,
         quantity,
@@ -45,6 +46,10 @@ router.post("/createTransaction", upload.single("image"), checkAuth, async(req, 
         }
         const data = await initPay(recipientEmail, total, '', metadata)
 
+        if(role === 'Seller') {
+            await sendPaymentlinkToRecipientEmail(recipientEmail, recipientName, productName, data.data.authorization_url)
+        }
+
         const transaction = await new Transaction({
             _id,
             user,
@@ -52,6 +57,7 @@ router.post("/createTransaction", upload.single("image"), checkAuth, async(req, 
             recipientEmail,
             recipientPhone,
             transactionType,
+            productName,
             price,
             quantity,
             role,
