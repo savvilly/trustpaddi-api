@@ -7,7 +7,7 @@
 
 ### Transactions
   At the creation of a transaction a paystack payment link is been sent as part of the response
-  - Create trasaction POST('/transaction/createTransaction')
+  - Create trasaction POST(`/transaction/createTransaction`)
     If the transaction role is a seller then the url link is been sent the recipientEmail for payments 
     - user
     - recipientName
@@ -26,7 +26,7 @@
 
 ### Orders
   When a paddilink is sent and an order is sent
-  - Create an order POST('/order/create-order')
+  - Create an order POST(`/order/create-order`)
     - productId
     - buyerEmail
     - buyerPhone
