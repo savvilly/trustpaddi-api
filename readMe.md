@@ -7,6 +7,20 @@
 
 ### Transactions
   At the creation of a transaction a paystack payment link is been sent as part of the response
+  - Create trasaction POST('/transaction/createTransaction')
+    If the transaction role is a seller then the url link is been sent the recipientEmail for payments 
+    - user
+    - recipientName
+    - recipientEmail
+    - recipientPhone
+    - productName
+    - transactionType
+    - price
+    - quantity
+    - role
+    - description
+    - duration
+
   - Verification of a transaction payment 
     as is GET `/transaction/verify-tx/:reference`
 
