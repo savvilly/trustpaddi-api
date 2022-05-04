@@ -2,6 +2,11 @@
   Authorization has been moved from the body of the request to the header of the request. So to send a request add the token to the header of the http request
   as is `Bearer ...token`
 
+
+### Account\wallet creation
+  At the creation of an account a wallet is create with the user 
+  with their total balance 0, trust balance 0, and withdraw balance 0
+
 #### :reference
   Is gotten after a paystack payent is initialized
 
@@ -10,6 +15,7 @@
   - Create trasaction POST(`/transaction/createTransaction`)
     If the transaction role is a seller then the url link is been sent the recipientEmail for payments 
     - user
+    - sellerId
     - recipientName
     - recipientEmail
     - recipientPhone
