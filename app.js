@@ -36,6 +36,10 @@ app.use("/auth", [
     require("./routes/auth/changePassword"),
 ])
 
+app.use('user', [
+    require('./routes/user/wallet')
+])
+
 app.use("/states", require("./routes/states"))
 app.use("/banks", require("./routes/banks"))
 
