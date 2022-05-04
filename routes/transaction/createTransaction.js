@@ -10,6 +10,7 @@ const { initPay } = require('../../paystack')
 
 router.post("/createTransaction", upload.single("image"), checkAuth, async(req, res, next) => {
     let {
+        sellerId,
         user,
         recipientName,
         recipientEmail,
@@ -40,7 +41,7 @@ router.post("/createTransaction", upload.single("image"), checkAuth, async(req, 
         const metadata = {
 					paymentForm: 'Transaction',
 					txId: _id,
-					userId: user,
+					sellerId: sellerId,
 					role: role,
 					transactionType: transactionType
         }
