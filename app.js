@@ -12,16 +12,7 @@ dotenv.config({ path: "./config/config.env" })
 
 connectDB()
 
-// app.use(cors())
-app.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin', '*')
-	res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST')
-	res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-	if (req.method === 'OPTIONS') {
-		return res.sendStatus(200)
-	}
-	next()
-})
+app.use(cors())
 
 app.use(
     bodyParser.urlencoded({
