@@ -8,6 +8,7 @@ router.post("/profile", checkAuth, async (req, res) => {
   try {
     console.log(req.file)
     let user = await User.findOne({ email })
+    console.log(user)
     res.status(200).json({
       message: "User found",
       success: true,
