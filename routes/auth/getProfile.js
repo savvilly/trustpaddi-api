@@ -3,8 +3,8 @@ const checkAuth = require("../../middleware/checkAuth")
 
 const User = require("../../models/User")
 
-router.post("/profile", checkAuth, async (req, res) => {
-  const { email } = req.body
+router.get("/profile/:email", checkAuth, async (req, res) => {
+  const email = req.params.email
   try {
     console.log(req.file)
     let user = await User.findOne({ email })
