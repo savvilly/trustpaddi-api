@@ -4,7 +4,7 @@ const checkAuth = require("../../middleware/checkAuth")
 const Transaction = require("../../models/Transaction")
 
 router.get("/getTransaction/:user", checkAuth, async(req, res) => {
-    const { user } = req.params.user
+    const user = req.params.user
     try {
         const transaction = await Transaction.find({ user })
         if (transaction.length)
