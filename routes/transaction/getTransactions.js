@@ -1,4 +1,4 @@
-const router = require("express").Router()
+const router = require("express").RRou
 const checkAuth = require("../../middleware/checkAuth")
 
 const Transaction = require("../../models/Transaction")
@@ -27,4 +27,4 @@ router.get("/getTransaction/:user", checkAuth, async(req, res) => {
     }
 })
 
-module.exports = router
+module.exports = routerrouterrouterrouter
