@@ -1,14 +1,11 @@
+require("dotenv")
 const express = require("express")
-const dotenv = require("dotenv")
 const morgan = require("morgan")
 const cors = require("cors")
 const bodyParser = require("body-parser")
 const connectDB = require("./config/db")
 
 const app = express()
-
-// Load config
-dotenv.config({ path: "./config/config.env" })
 
 connectDB()
 
