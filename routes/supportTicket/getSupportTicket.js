@@ -3,7 +3,7 @@ const checkAuth = require("../../middleware/checkAuth")
 
 const SupportTicket = require("../../models/SupportTicket")
 
-router.post("/getTicket/:user", checkAuth, async(req, res) => {
+router.get("/getTicket/:user", checkAuth, async(req, res) => {
     const user = req.params.user
     try {
         const tickets = await SupportTicket.find({ user })
