@@ -3,7 +3,7 @@ const checkAuth = require("../../middleware/checkAuth")
 
 const SupportTicket = require("../../models/SupportTicket")
 
-router.post("/getSingleTicket", async(req, res) => {
+router.post("/getSingleTicket", checkAuth, async(req, res) => {
     const { user, _id } = req.body
     try {
         const tickets = await SupportTicket.find({ $and: [{ user }, { _id }] })
