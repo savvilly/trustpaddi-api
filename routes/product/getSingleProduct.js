@@ -3,8 +3,8 @@ const checkAuth = require("../../middleware/checkAuth")
 
 const Product = require("../../models/Product")
 
-router.post("/getSingleProduct", async(req, res) => {
-    const { _id } = req.body
+router.post("/getSingleProduct/:_id", async(req, res) => {
+    const _id = req.params._id
     try {
         const product = await Product.find({
             _id,
