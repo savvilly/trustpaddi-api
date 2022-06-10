@@ -17,7 +17,7 @@ router.post("/createTicket", upload.single("file"), async(req, res) => {
         let ticket = await SupportTicket.create({
             _id: new mongoose.Types.ObjectId(),
             user,
-            subject,
+            subject, 
             description,
             department,
             file: result.secure_url,
