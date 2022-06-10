@@ -3,7 +3,7 @@ const checkAuth = require("../../middleware/checkAuth")
 
 const Bank = require("../../models/Banks")
 
-router.post("/userBanks/:user", checkAuth, async(req, res) => {
+router.get("/userBanks/:user", checkAuth, async(req, res) => {
     const user = req.params.user
     const { bankId } = req.body
 
