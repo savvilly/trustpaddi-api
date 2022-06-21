@@ -17,7 +17,8 @@ router.post("/create-order", checkAuth, async(req, res, next) => {
     } = req.body
 
     res.status(200).json({
-        text: 'hey'
+        text: 'hey',
+        data: req.body
     })
 
     // if (!quantity) quantity = 1
