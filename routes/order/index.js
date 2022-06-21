@@ -7,14 +7,14 @@ const checkAuth = require("../../middleware/checkAuth")
 
 const { initPay, verifyTx } = require('../../paystack')
 
-router.post("/create-order", checkAuth, async(req, res, next) => {
+router.post("/create-order/:productId/:buyerEmail/:buyerPhone/:sellerId/:quantity", checkAuth, async(req, res, next) => {
     let {
         productId,
         buyerEmail,
         buyerPhone,
         sellerId,
         quantity
-    } = req.body
+    } = req.params
 
     if (!quantity) quantity = 1
     try {
