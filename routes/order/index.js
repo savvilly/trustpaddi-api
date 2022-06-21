@@ -16,68 +16,63 @@ router.post("/create-order", checkAuth, async(req, res, next) => {
         quantity
     } = req.body
 
-    res.status(200).json({
-        text: 'hey',
-        data: req.body
-    })
+    if (!quantity) quantity = 1
+    try {
+        if (!buyerEmail || !buyerPhone) throw new Error('Added buyers details')
+        const product = await Product.findById(productId)
+        if (!product) {
+            const error = new Error('No product found')
+            error.statusCode = 401
+            throw error
+        }
 
-    // if (!quantity) quantity = 1
-    // try {
-    //     if (!buyerEmail || !buyerPhone) throw new Error('Added buyers details')
-    //     const product = await Product.findById(productId)
-    //     if (!product) {
-    //         const error = new Error('No product found')
-    //         error.statusCode = 401
-    //         throw error
-    //     }
+        const user = await User.findById(sellerId)
 
-    //     const user = await User.findById(sellerId)
+        if (!user) {
+            const error = new Error('No user found')
+            error.statusCode = 401
+            throw error
+        }
 
-    //     if (!user) {
-    //         const error = new Error('No user found')
-    //         error.statusCode = 401
-    //         throw error
-    //     }
+        let price = product.price
+        price = price * quantity
+        let charge = (20 / 100) * price
+        let totalCost = Number(charge) + Number(price)
 
-    //     let price = product.price
-    //     price = price * quantity
-    //     let charge = (20 / 100) * price
-    //     let totalCost = Number(charge) + Number(price)
+        let _id = new mongoose.Types.ObjectId()
 
-    //     let _id = new mongoose.Types.ObjectId()
+        // Create payment with paystack
+        const metadata = {
+            paymentForm: 'Order',
+            orderId: _id,
+            productId: productId,
+            sellerId: sellerId,
+            buyerEmail: buyerEmail,
+        }
+        const data = await initPay(buyerEmail, totalCost, '', metadata)
 
-    //     // Create payment with paystack
-    //     const metadata = {
-    //         paymentForm: 'Order',
-    //         orderId: _id,
-    //         productId: productId,
-    //         sellerId: sellerId,
-    //         buyerEmail: buyerEmail,
-    //     }
-    //     const data = await initPay(buyerEmail, totalCost, '', metadata)
-
-    //     const order = await new Order({
-    //         _id,
-    //         productId,
-    //         buyerEmail,
-    //         buyerPhone,
-    //         sellerId,
-    //         totalCost,
-    //         quantity,
-    //         price,
-    //         charge,
-    //         reference: data.data.reference,
-    //     })
-    //     await order.save()
-    //     res.status(201).json({
-    //         message: "Order successfully created",
-    //         success: true,
-    //         order,
-    //         url: data.data.authorization_url
-    //     })
-    // } catch (error) {
-    //     next(error)
-    // }
+        const order = await new Order({
+            _id,
+            productId,
+            buyerEmail,
+            buyerPhone,
+            sellerId,
+            totalCost,
+            quantity,
+            price,
+            charge,
+            reference: data.data.reference,
+        })
+        await order.save()
+        res.status(201).json({
+            message: "Order successfully created",
+            success: true,
+            order,
+            url: data.data.authorization_url
+        })
+    } catch (error) {
+        next(error)
+    }
 })
 
 router.get('/get-orders', checkAuth, async(req, res, next) => {
