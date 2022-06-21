@@ -7,7 +7,7 @@ const checkAuth = require("../../middleware/checkAuth")
 
 const { initPay, verifyTx } = require('../../paystack')
 
-router.post("/create-order", checkAuth, async(req, res, next) => {
+router.get("/create-order", checkAuth, async(req, res, next) => {
     let {
       productId,
       buyerEmail,
