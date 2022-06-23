@@ -97,10 +97,19 @@ router.get('/get-order/:orderId', checkAuth, async(req, res, next) => {
             throw error
         }
 
-        res.status(200).json({
-            message: 'Order found',
-            data: order
+        const product = await Product.find({
+            _id: order.productId,
         })
+        if (product.length)
+            res.status(200).json({
+                data: {
+                    product,
+                    order,
+                },
+                success: true,
+                message: "Fetched product successfully",
+            })
+
     } catch (error) {
         next(error)
     }
@@ -125,7 +134,6 @@ router.get("/verify-order/:reference", checkAuth, async(req, res) => {
 
         const data = await verifyTx(reference)
         const order = await Order.findOne({ reference: reference })
-            // console.log(data)
         order.status = data.data.status
         await order.save()
         res.status(200).json({
