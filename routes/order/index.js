@@ -128,9 +128,9 @@ router.get('/get-user-orders/:userId', checkAuth, async(req, res, next) => {
     }
 })
 
-router.get("/verify-order/:reference", checkAuth, async(req, res) => {
+router.post("/verify-order/:reference", checkAuth, async(req, res) => {
     try {
-        const reference = req.params.reference
+        const { reference } = req.params
 
         const data = await verifyTx(reference)
         const order = await Order.findOne({ reference: reference })
