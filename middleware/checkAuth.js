@@ -1,15 +1,14 @@
-const jwt = require("jsonwebtoken")
+import jwt from 'jsonwebtoken';
+import { UNAUTHORIZED } from '../utils/statusCode';
 
-module.exports = (req, res, next) => {
+const checkAuth = (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(' ')[1]
-    let decoded = jwt.verify(token, process.env.SESSION_SECRET)
-    req.userData = decoded
-    next()
+    const token = req.headers.authorization.split(' ')[1];
+    let decoded = jwt.verify(token, process.env.SESSION_SECRET);
+    req.userData = decoded;
+    next();
   } catch (error) {
-    res.status(401).json({
-      message: "Auth failed",
-      success: false,
-    })
+    res.status(UNAUTHORIZED).json({ status: UNAUTHORIZED, message: 'Auth failed, unauthorized', success: false });
   }
-}
+};
+export default checkAuth;

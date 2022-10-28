@@ -5,9 +5,10 @@
     "main": "app.js",
     "author": "Rukkiecodes",
     "license": "MIT",
+    "type": "module",
     "scripts": {
         "start": "cross-env NODE_ENV=production node app",
-        "dev": "cross-env NODE_ENV=development nodemon app",
+        "dev": "cross-env NODE_ENV=development nodemon --experimental-modules --es-module-specifier-resolution=node app.js",
         "deploy": "git add . && git commit -am 'new commit' && git push heroku master"
     },
     "dependencies": {

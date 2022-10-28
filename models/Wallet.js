@@ -1,22 +1,25 @@
-const mongoose = require("mongoose")
+import mongoose from 'mongoose';
 
-const walletSchema = new mongoose.Schema({
-  totalAmount: {
-    type: Number,
-    required: true,
+const walletSchema = new mongoose.Schema(
+  {
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+    withdrawalAmount: {
+      type: Number,
+      required: true,
+    },
+    trustAmount: {
+      type: Number,
+      required: true,
+    },
+    sellerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
-  withdrawalAmount: {
-    type: Number,
-    required: true,
-  },
-  trustAmount: {
-    type: Number,
-    required: true,
-  },
-  sellerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-}, { timestamps: true })
+  { timestamps: true },
+);
 
-module.exports = mongoose.model("Wallet", walletSchema)
+export default mongoose.model('Wallet', walletSchema);
