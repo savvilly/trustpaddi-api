@@ -1,57 +1,36 @@
-const router = require("express").Router()
-const mongoose = require("mongoose")
-const bcrypt = require("bcrypt")
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+import User from '../../models/User';
+import Wallet from '../../models/Wallet';
+import { NOT_CREATED, CREATED, SERVER_ERROR } from '../../utils/statusCode';
 
-const User = require("../../models/User")
-const Wallet = require("../../models/Wallet")
-
-router.post("/signup", async(req, res, next) => {
-    //SUGNUP USER
-    try {
-        const { firstname, lastname, email, password, referral_code } = req.body
-        let user = await User.findOne({ email })
-
-        if (user) {
-            return res.status(401).json({
-                message: "Auth failed",
-                success: false,
-            })
-        } else {
-            bcrypt.hash(password, 10, (err, hash) => {
-                if (err) {
-                    return res.status(401).json({
-                        message: "Auth failed",
-                        success: false,
-                    })
-                } else {
-                    let newUser = {
-                        _id: new mongoose.Types.ObjectId(),
-                        firstname,
-                        lastname,
-                        email,
-                        referral_code,
-                        password: hash,
-                    }
-                    const wallet = new Wallet({
-                        sellerId: newUser._id,
-                        totalAmount: 0,
-                        withdrawalAmount: 0,
-                        trustAmount: 0
-                    })
-                    wallet.save()
-                    user = User.create(newUser)
-
-                    return res.status(201).json({
-                        message: "Auth successful",
-                        success: true,
-                    })
-                }
-            })
-        }
-    } catch (error) {
-        console.error(error)
-        next(error)
+export const signupUser = async (req, res, next) => {
+  try {
+    const { firstname, lastname, email, password, referral_code } = req.body;
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(NOT_CREATED).json({ status: NOT_CREATED, message: 'account already exist', success: false });
+    } else {
+      const hashPassword = await bcrypt.hash(password, 10);
+      const newUser = {
+        _id: new mongoose.Types.ObjectId(),
+        firstname,
+        lastname,
+        email,
+        referral_code,
+        password: hashPassword,
+      };
+      const wallet = new Wallet({
+        sellerId: newUser._id,
+        totalAmount: 0,
+        withdrawalAmount: 0,
+        trustAmount: 0,
+      });
+      User.create(newUser);
+      wallet.save();
+      return res.status(CREATED).json({ status: CREATED, message: 'success', success: true });
     }
-})
-
-module.exports = router
+  } catch (error) {
+    return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });
+  }
+};

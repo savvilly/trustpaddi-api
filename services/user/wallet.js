@@ -8,6 +8,6 @@ export const getUserWalletBalance = async (req, res, next) => {
     if (!wallet) throw new Error('Seller wallet not found');
     return res.status(SUCCESS).json({ status: SUCCESS, message: 'success', success: true, payload: wallet });
   } catch (error) {
-     return res.status(SERVER_RROR ).json({ status: SERVER_ERROR , message: error, success: false,});
+    return res.status(SERVER_RROR).json({ status: SERVER_ERROR, message: error, success: false });
   }
 };

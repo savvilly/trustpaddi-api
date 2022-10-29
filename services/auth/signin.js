@@ -12,13 +12,22 @@ export const siginUser = async (req, res) => {
     } else {
       const auth = await bcrypt.compare(password, user.password);
       if (!auth) {
-        return res.status(UNAUTHORIZED).json({ status: UNAUTHORIZED, message: 'incorrect password or emaill', success: false });
+        return res
+          .status(UNAUTHORIZED)
+          .json({ status: UNAUTHORIZED, message: 'incorrect password or emaill', success: false });
       } else {
-        const token = jwt.sign({ email, userId: user._id }, process.env.SESSION_SECRET, { expiresIn: '7d' });
-        return res.status(SUCCESS).json({ status: SUCCESS, message: 'success', success: false, playload: { userInfo: user, token: token } });
+        const token = jwt.sign({ email, userId: user._id }, process.env.SESSION_SECRET, {
+          expiresIn: '7d',
+        });
+        return res.status(SUCCESS).json({
+          status: SUCCESS,
+          message: 'success',
+          success: true,
+          playload: { userInfo: user, token: token },
+        });
       }
     }
   } catch (error) {
-    return res.status(SERVER_RROR).json({ status: SERVER_ERROR, message: error, success: false })
+    return res.status(SERVER_RROR).json({ status: SERVER_ERROR, message: error, success: false });
   }
-}
+};
