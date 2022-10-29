@@ -1,59 +1,24 @@
-const router = require("express").Router()
-const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import User from '../../models/User';
+import { UNAUTHORIZED, SUCCESS, NOT_FOUND } from '../../utils/statusCode';
 
-const User = require("../../models/User")
-
-router.post("/signin", (req, res) => {
-  // LOGIN USER
-  const { email, password } = req.body
-
-  User.findOne({ email })
-    .exec()
-    .then((user) => {
-      if (user) {
-        bcrypt.compare(password, user.password, (err, result) => {
-          if (err) {
-            return res.status(401).json({
-              success: false,
-              message: "Auth failed",
-            })
-          }
-          if (result) {
-            const token = jwt.sign(
-              {
-                email,
-                userId: user._id,
-              },
-              process.env.SESSION_SECRET,
-              {
-                expiresIn: "7d",
-              }
-            )
-            return res.status(200).json({
-              user,
-              token,
-              success: true,
-              message: "Auth successful",
-            })
-          }
-          return res.status(401).json({
-            success: false,
-            message: "Auth failed",
-          })
-        })
+export const siginUser = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(NOT_FOUND).json({ status: NOT_FOUND, message: 'incorrect password or emaill', success: false });
+    } else {
+      const auth = await bcrypt.compare(password, user.password);
+      if (!auth) {
+        return res.status(UNAUTHORIZED).json({ status: UNAUTHORIZED, message: 'incorrect password or emaill', success: false });
       } else {
-        return res.status(401).json({
-          message: "Auth failed",
-        })
+        const token = jwt.sign({ email, userId: user._id }, process.env.SESSION_SECRET, { expiresIn: '7d' });
+        return res.status(SUCCESS).json({ status: SUCCESS, message: 'success', success: false, playload: { userInfo: user, token: token } });
       }
-    })
-    .catch((err) => {
-      return res.status(401).json({
-        success: false,
-        message: "Auth failed",
-      })
-    })
-})
-
-module.exports = router
+    }
+  } catch (error) {
+    return res.status(SERVER_RROR).json({ status: SERVER_ERROR, message: error, success: false })
+  }
+}

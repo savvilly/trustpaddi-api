@@ -1,5 +1,5 @@
 import Wallet from '../../models/Wallet';
-import { SUCCESS } from '../../utils/statusCode';
+import { SUCCESS, SERVER_ERROR } from '../../utils/statusCode';
 
 export const getUserWalletBalance = async (req, res, next) => {
   const sellerId = req.params.sellerId;
@@ -8,6 +8,6 @@ export const getUserWalletBalance = async (req, res, next) => {
     if (!wallet) throw new Error('Seller wallet not found');
     return res.status(SUCCESS).json({ status: SUCCESS, message: 'success', success: true, payload: wallet });
   } catch (error) {
-    return next(error);
+     return res.status(SERVER_RROR ).json({ status: SERVER_ERROR , message: error, success: false,});
   }
 };

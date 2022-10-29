@@ -8,7 +8,7 @@ const checkAuth = (req, res, next) => {
     req.userData = decoded;
     next();
   } catch (error) {
-    res.status(UNAUTHORIZED).json({ status: UNAUTHORIZED, message: 'Auth failed, unauthorized', success: false });
+    res.status(UNAUTHORIZED).json({ status: UNAUTHORIZED, message: 'unauthorized', success: false });
   }
 };
 export default checkAuth;
