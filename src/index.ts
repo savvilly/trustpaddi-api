@@ -5,6 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import connectDB from './config/db.js';
 import router from "./routes"
+import { Request, Response, NextFunction } from 'express';
 
 const app = express();
 dotenv.config();
@@ -14,7 +15,6 @@ app.use(cors());
 
 app.use(
   bodyParser.urlencoded({
-    true: false,
     limit: '50mb',
     extended: true,
   }),
@@ -34,7 +34,7 @@ app.get('/api/v1', (req, res) => {
 });
 
 // Error handling
-app.use((error, req, res, next) => {
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   const status = error.statusCode || 500;
   const message = error.message;
   const data = error.data;
@@ -43,4 +43,8 @@ app.use((error, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on ${PORT}`));
+let serverType: any = process.env.NODE_ENV
+
+app.listen(PORT, () => {
+  console.log(`Server running in ${serverType} mode on ${PORT}`)
+});

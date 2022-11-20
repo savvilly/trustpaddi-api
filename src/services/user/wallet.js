@@ -1,7 +1,7 @@
 import Wallet from '../../models/Wallet';
 import { SUCCESS, SERVER_ERROR } from '../../utils/statusCode';
 
-export const getUserWalletBalance = async (req, res, next) => {
+export const getUserWalletBallance = async (req, res) => {
   const sellerId = req.params.sellerId;
   try {
     const wallet = await Wallet.findOne({ sellerId: sellerId });
@@ -11,3 +11,7 @@ export const getUserWalletBalance = async (req, res, next) => {
     return res.status(SERVER_RROR).json({ status: SERVER_ERROR, message: error, success: false });
   }
 };
+
+export const updateUserWalletBallance = async (req, res) => {
+  
+}

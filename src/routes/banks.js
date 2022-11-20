@@ -1,8 +1,8 @@
 const router = require("express").Router()
 
-const axios = require('../config/axios')
+const axios = require('../../config/axios')
 
-const { getBanks } = require('../paystack')
+const { getBanks } = require('../../paystack')
 
 
 router.get('get-bank',  async (req, res) => {
