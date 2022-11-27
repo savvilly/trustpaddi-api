@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import { WalletProps } from '../types/wallet';
 
-const walletSchema = new mongoose.Schema(
+const walletSchema = new mongoose.Schema<WalletProps>(
   {
     totalAmount: {
       type: Number,
@@ -14,7 +15,7 @@ const walletSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    sellerId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },

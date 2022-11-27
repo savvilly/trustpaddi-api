@@ -1,16 +1,17 @@
 import mongoose from 'mongoose';
-import { Request, Response  } from 'express';
+import { Request, Response } from 'express';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import User from '../../models/User';
 import Wallet from '../../models/Wallet';
 import { NOT_CREATED, CREATED, SERVER_ERROR } from '../../utils/statusCode';
-import { UserProps } from '../../types';
+import { UserProps } from '../../types/user';
+import { WalletProps } from '../../types/wallet';
 
 
 export const signupUser = async (req: Request, res: Response) => {
   try {
-    const { firstname, lastname, email, password, referral_code,  avatar, phone, country, state, address, lga } =
+    const { firstname, lastname, email, password, referral_code, avatar, phone, country, state, address, lga, bankAccount, bankAccountName, bankName } =
       req.body;
     const user = await User.findOne({ email });
     if (user) {
@@ -30,20 +31,21 @@ export const signupUser = async (req: Request, res: Response) => {
         country,
         state,
         lga,
+        bankAccount, bankAccountName, bankName,
         customer_code: `${lastname}-${crypto
           .randomBytes(Math.ceil(5 / 2))
           .toString('hex')
           .slice(0, 5)
           .toUpperCase()}`,
       };
-      const wallet = new Wallet({
-        sellerId: newUser._id,
+      const wallet: WalletProps = {
+        userId: newUser._id,
         totalAmount: 0,
         withdrawalAmount: 0,
         trustAmount: 0,
-      });
+      };
       User.create(newUser);
-      wallet.save();
+      Wallet.create(wallet)
       return res.status(CREATED).json({ status: CREATED, message: 'success', success: true });
     }
   } catch (error) {

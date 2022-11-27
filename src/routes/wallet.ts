@@ -1,4 +1,4 @@
-import checkAuth from '../../middleware/checkAuth';
+import checkAuth from '../middleware/checkAuth';
 import { getUserWalletBallance, updateUserWalletBallance } from '../services/user/wallet';
 
 import { Router } from 'express';

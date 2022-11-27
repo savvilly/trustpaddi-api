@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import { UserProps } from '../types/user';
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema<UserProps>(
   {
     _id: mongoose.Schema.Types.ObjectId,
     firstname: {
@@ -48,10 +49,27 @@ const UserSchema = new mongoose.Schema(
     customer_code: {
       type: String,
     },
-    isBankVerified: {
+    isKYCVerified: {
       type: Boolean,
       default: false,
     },
+    bankAccount: {
+      type: String,
+    },
+    bankAccountName: {
+      type: String,
+    },
+    bankName: {
+      type: String,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+    active: {
+      type: Boolean,
+      default: true,
+    }
   },
   { timestamps: true },
 );

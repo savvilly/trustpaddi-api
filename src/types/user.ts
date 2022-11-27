@@ -1,6 +1,7 @@
+import { Date, Types } from 'mongoose';
 
 export interface UserProps {
-    _id: Object;
+    _id: Types.ObjectId,
     firstname: string;
     lastname: string;
     email: string;
@@ -13,6 +14,13 @@ export interface UserProps {
     address: string;
     lga: string;
     customer_code: string;
+    isKYCVerified?: boolean;
+    deleted?: boolean;
+    active?: boolean;
+    createdAt?: Date
+    bankAccount: string;
+    bankAccountName: string
+    bankName: string
 }
 
 export interface SignInProps {

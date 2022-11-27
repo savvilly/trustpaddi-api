@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import connectDB from './config/db.js';
-import router from "./routes"
+import router from "./routes/index.js"
 import { Request, Response, NextFunction } from 'express';
 
 const app = express();
@@ -46,5 +46,5 @@ const PORT = process.env.PORT || 8000;
 let serverType: any = process.env.NODE_ENV
 
 app.listen(PORT, () => {
-  console.log(`Server running in ${serverType} mode on ${PORT}`)
+  console.log(`Server running on ${PORT}`)
 });

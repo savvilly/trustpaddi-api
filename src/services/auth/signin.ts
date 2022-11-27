@@ -4,12 +4,10 @@ import { Request, Response } from 'express';
 import User from '../../models/User';
 import { UNAUTHORIZED, SUCCESS, NOT_FOUND, SERVER_ERROR } from '../../utils/statusCode'
 
-
-
 export const siginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, deleted: false, active: true });
     if (!user) {
       return res.status(NOT_FOUND).json({ status: NOT_FOUND, message: 'incorrect password or emaill', success: false });
     } else {
