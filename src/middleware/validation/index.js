@@ -2,7 +2,6 @@ import Validator from 'validator';
 import isEmpty from 'is-empty';
 import { BAD_REQUEST } from '../../utils/statusCode';
 
-
 export const userValidation = (req, res, next) => {
   let errors = {};
   if (Validator.isEmpty(req.body.email)) {
@@ -26,6 +25,45 @@ export const userValidation = (req, res, next) => {
     errors.password = 'passwords must match';
   }
 
+  if (!isEmpty(errors)) {
+    return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
+  } else {
+    next();
+  }
+};
+
+export const createProductValidation = (eq, res, next) => {
+  let errors = {};
+  if (Validator.isEmpty(req.body.name)) {
+    errors.name = 'product name is needed';
+  }
+  if (Validator.isEmpty(req.body.image)) {
+    errors.image = 'product iamge is needed';
+  }
+  if (Validator.isEmpty(req.body.image)) {
+    errors.image = 'product name is needed';
+  }
+  if (Validator.isEmpty(req.body.address)) {
+    errors.address = 'product addresss is needed';
+  }
+  if (Validator.isEmpty(req.body.contact)) {
+    errors.contact = 'seller contact is needed ';
+  }
+  if (Validator.isEmpty(req.body.userId)) {
+    errors.userId = 'userId  is needed ';
+  }
+  if (Validator.isEmpty(req.body.city)) {
+    errors.city = 'city is needed is needed';
+  }
+  if (Validator.isEmpty(req.body.state)) {
+    errors.state = 'state is needed ';
+  }
+  if (Validator.isEmpty(req.body.description)) {
+    errors.description = 'product description is needed ';
+  }
+  if (Validator.isEmpty(req.body.price)) {
+    errors.description = 'product price is needed ';
+  }
   if (!isEmpty(errors)) {
     return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
   } else {
