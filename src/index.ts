@@ -43,8 +43,6 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 const PORT = process.env.PORT || 8000;
-let serverType: any = process.env.NODE_ENV
-
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`)
 });

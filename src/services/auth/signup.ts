@@ -3,16 +3,17 @@ import { Request, Response } from 'express';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import User from '../../models/User';
-import Wallet from '../../models/Wallet';
 import { NOT_CREATED, CREATED, SERVER_ERROR } from '../../utils/statusCode';
 import { UserProps } from '../../types/user';
-import { WalletProps } from '../../types/wallet';
-
+import { CreateWalletProps } from '../../types/wallet';
+import { createUserWallet } from '../user/wallet';
+import AxiosInstance from '../../utils/axiosCall'
 
 export const signupUser = async (req: Request, res: Response) => {
   try {
-    const { firstname, lastname, email, password, referral_code, avatar, phone, country, state, address, lga, bankAccount, bankAccountName, bankName } =
+    const { firstName, lastName, email, password, referralCode, avatar, phone, country, state, address, lga, bankAccount, bankAccountName, bankName } =
       req.body;
+
     const user = await User.findOne({ email });
     if (user) {
       return res.status(NOT_CREATED).json({ status: NOT_CREATED, message: 'account already exist', success: false });
@@ -20,11 +21,11 @@ export const signupUser = async (req: Request, res: Response) => {
       const hashPassword = await bcrypt.hash(password, 10);
       const newUser: UserProps = {
         _id: new mongoose.Types.ObjectId(),
-        firstname,
-        lastname,
+        firstName,
+        lastName,
         email,
         phone,
-        referral_code,
+        referralCode,
         password: hashPassword,
         address,
         avatar,
@@ -32,21 +33,23 @@ export const signupUser = async (req: Request, res: Response) => {
         state,
         lga,
         bankAccount, bankAccountName, bankName,
-        customer_code: `${lastname}-${crypto
+        customerCode: `${lastName}-${crypto
           .randomBytes(Math.ceil(5 / 2))
           .toString('hex')
           .slice(0, 5)
           .toUpperCase()}`,
       };
-      const wallet: WalletProps = {
+
+      User.create(newUser);
+      const wallet: CreateWalletProps = {
         userId: newUser._id,
         totalAmount: 0,
         withdrawalAmount: 0,
         trustAmount: 0,
       };
-      User.create(newUser);
-      Wallet.create(wallet)
-      return res.status(CREATED).json({ status: CREATED, message: 'success', success: true });
+
+      createUserWallet(wallet)
+      return res.status(CREATED).json({ status: CREATED, message: 'Account created', success: true});
     }
   } catch (error) {
     return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });

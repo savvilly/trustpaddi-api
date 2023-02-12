@@ -2,18 +2,18 @@ import { Date, Types } from 'mongoose';
 
 export interface UserProps {
     _id: Types.ObjectId,
-    firstname: string;
-    lastname: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
-    referral_code: string;
+    referralCode: string;
     avatar: string;
     phone: string;
     country: string;
     state: string;
     address: string;
     lga: string;
-    customer_code: string;
+    customerCode: string;
     isKYCVerified?: boolean;
     deleted?: boolean;
     active?: boolean;

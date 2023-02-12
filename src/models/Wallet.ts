@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { WalletProps } from '../types/wallet';
+import { CreateWalletProps } from '../types/wallet';
 
-const walletSchema = new mongoose.Schema<WalletProps>(
+const walletSchema = new mongoose.Schema<CreateWalletProps>(
   {
     totalAmount: {
       type: Number,

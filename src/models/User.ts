@@ -4,11 +4,11 @@ import { UserProps } from '../types/user';
 const UserSchema = new mongoose.Schema<UserProps>(
   {
     _id: mongoose.Schema.Types.ObjectId,
-    firstname: {
+    firstName: {
       type: String,
       required: true,
     },
-    lastname: {
+    lastName: {
       type: String,
       required: true,
     },
@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema<UserProps>(
       type: String,
       required: true,
     },
-    referral_code: {
+    referralCode: {
       type: String,
     },
     avatar: {
@@ -46,7 +46,7 @@ const UserSchema = new mongoose.Schema<UserProps>(
       type: Date,
       default: Date.now,
     },
-    customer_code: {
+    customerCode: {
       type: String,
     },
     isKYCVerified: {
