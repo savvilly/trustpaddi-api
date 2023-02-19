@@ -20,7 +20,6 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const updateProduct = async (req: Request, res: Response) => {
     const { productId } = req.params
-    console.log("productId ", productId)
     const { name, category, price, description, address, city, state, contact, image, userId, storeId } = req.body;
     const editedProduct: CreateProductIProps = {
         storeId, name, category, price, description, address, city, state, contact, image, userId
@@ -29,6 +28,19 @@ export const updateProduct = async (req: Request, res: Response) => {
         const result = await Product.findOneAndUpdate({ _id: productId }, editedProduct)
         if (result) {
             return res.status(SUCCESS).json({ status: SUCCESS, message: 'Product updated', success: true, });
+        }
+    } catch (error) {
+        return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });
+    }
+}
+
+
+export const deleteProduct = async (req: Request, res: Response) => {
+    const { productId } = req.params
+    try {
+        const result = await Product.findOneAndDelete({ _id: productId })
+        if (result) {
+            return res.status(SUCCESS).json({ status: SUCCESS, message: 'Product deleted', success: true, });
         }
     } catch (error) {
         return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });
