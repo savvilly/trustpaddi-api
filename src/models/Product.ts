@@ -34,7 +34,6 @@ const productSchema = new mongoose.Schema<CreateProductIProps>(
         },
         image: {
             type: [],
-            
         },
         contact: {
             type: String,

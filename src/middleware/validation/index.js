@@ -38,10 +38,7 @@ export const createProductValidation = (req, res, next) => {
     errors.name = 'product name is needed';
   }
   if (Validator.isEmpty(req.body.image)) {
-    errors.image = 'product iamge is needed';
-  }
-  if (Validator.isEmpty(req.body.image)) {
-    errors.image = 'product name is needed';
+    errors.image = 'product iamge is needed, at lest one';
   }
   if (Validator.isEmpty(req.body.address)) {
     errors.address = 'product addresss is needed';

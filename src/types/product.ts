@@ -19,8 +19,8 @@ export enum CategoriesIProps {
     "Office Equipment",
     "Furniture",
     "Medical",
-    "Food and Beverage",
+    "Food/Beverage",
     "Cosmetics",
-    "Phones / Computers ",
+    "Phones/Computers",
     "Electronics"
 }
