@@ -25,14 +25,14 @@ export const signupUser = async (req: Request, res: Response) => {
         lastName,
         email,
         phone,
-        referralCode,
+        referralCode: null ||  referralCode,
         password: hashPassword,
-        address,
-        avatar,
-        country,
-        state,
-        lga,
-        bankAccount, bankAccountName, bankName,
+        address: null,
+        avatar: null,
+        country: null,
+        state: null,
+        lga: null,
+        bankAccount: null, bankAccountName: null, bankName: null,
         customerCode: `${lastName}-${crypto
           .randomBytes(Math.ceil(5 / 2))
           .toString('hex')
@@ -49,7 +49,7 @@ export const signupUser = async (req: Request, res: Response) => {
       };
 
       createUserWallet(wallet)
-      return res.status(CREATED).json({ status: CREATED, message: 'Account created', success: true});
+      return res.status(CREATED).json({ status: CREATED, message: 'Account created', success: true });
     }
   } catch (error) {
     return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });

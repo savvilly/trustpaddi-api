@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import User from '../../models/User';
 import { UNAUTHORIZED, SUCCESS, NOT_FOUND, SERVER_ERROR } from '../../utils/statusCode'
+import { UserDTO } from "../../types/user"
 
 export const siginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -18,14 +19,17 @@ export const siginUser = async (req: Request, res: Response) => {
           .json({ status: UNAUTHORIZED, message: 'incorrect password or emaill', success: false });
       } else {
         let session_secret_token: any = process.env.SESSION_SECRET
-        const token = jwt.sign({ email, userId: user._id }, session_secret_token, {
+        const token = jwt.sign({ email, userId: user.id }, session_secret_token, {
           expiresIn: '7d',
         });
         return res.status(SUCCESS).json({
           status: SUCCESS,
           message: 'success',
           success: true,
-          playload: { userInfo: user, token: token },
+          playload: {
+            userInfo: new UserDTO(user),
+            token: token
+          },
         });
       }
     }

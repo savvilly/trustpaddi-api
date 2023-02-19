@@ -4,10 +4,10 @@ import { NOT_CREATED, CREATED, SERVER_ERROR } from '../../utils/statusCode';
 import { CreateProductIProps } from '../../types/product';
 
 export const createProduct = async (req: Request, res: Response) => {
-    const { name, category, price, description, address, city, state, contact, image, userId } = req.body;
+    const { name, category, price, description, address, city, state, contact, image, userId ,storeId} = req.body;
     try {
         const newProduct: CreateProductIProps = {
-            name, category, price, description, address, city, state, contact, image, userId
+            storeId, name, category, price, description, address, city, state, contact, image, userId
         }
         const result = await Product.create(newProduct)
         if (result) {

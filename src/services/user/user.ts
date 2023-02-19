@@ -9,7 +9,7 @@ export const updateProfile = async (req: Request, res: Response) => {
 		let data = { firstname, lastname, email, password, referral_code, avatar, phone, country, state, address, lga, bankAccount, bankAccountName, bankName }
 		const user = await User.findByIdAndUpdate(_id, data, { new: true })
 		if (!user) {
-			return res.status(NOT_CREATED).json({ status: NOT_CREATED, message: "User not found or invalid user id", success: false });
+			return res.status(NOT_CREATED).json({ status: NOT_CREATED, message: "User not found or invalid user _id", success: false });
 		} else {
 			return res.status(SUCCESS).json({ status: SUCCESS, message: "profile updated successfuly", success: true, payload: user })
 		}
@@ -33,7 +33,7 @@ export const setUserActiveStatus = async (req: Request, res: Response) => {
 		console.log(req.body)
 		const user = await User.findByIdAndUpdate(_id, { active: active }, { new: true })
 		if (!user) {
-			return res.status(NOT_CREATED).json({ status: NOT_CREATED, message: "User not found or invalid user id", success: false });
+			return res.status(NOT_CREATED).json({ status: NOT_CREATED, message: "User not found or invalid user _id", success: false });
 		} else {
 			return res.status(SUCCESS).json({ status: SUCCESS, message: "Account status updated successfully", success: true, payload: user })
 		}
@@ -48,7 +48,7 @@ export const subDeleteUserAccount = async (req: Request, res: Response) => {
 		const { _id, deleted } = req.body
 		const user = await User.findByIdAndUpdate(_id, { deleted: deleted }, { new: true })
 		if (!user) {
-			return res.status(NOT_CREATED).json({ status: NOT_CREATED, message: "User not found or invalid user id", success: false });
+			return res.status(NOT_CREATED).json({ status: NOT_CREATED, message: "User not found or invalid user _id", success: false });
 		} else {
 			const userData = await User.findByIdAndUpdate(_id, { email: `del-${user.email}` }, { new: true })
 			return res.status(SUCCESS).json({ status: SUCCESS, message: "profile updated successfuly", success: true, payload: userData })

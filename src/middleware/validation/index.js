@@ -32,7 +32,7 @@ export const userValidation = (req, res, next) => {
   }
 };
 
-export const createProductValidation = (eq, res, next) => {
+export const createProductValidation = (req, res, next) => {
   let errors = {};
   if (Validator.isEmpty(req.body.name)) {
     errors.name = 'product name is needed';
@@ -63,6 +63,21 @@ export const createProductValidation = (eq, res, next) => {
   }
   if (Validator.isEmpty(req.body.price)) {
     errors.description = 'product price is needed ';
+  }
+  if (!isEmpty(errors)) {
+    return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
+  } else {
+    next();
+  }
+};
+
+export const createStoreValidation = (req, res, next) => {
+  let errors = {};
+  if (Validator.isEmpty(req.body.storeName)) {
+    errors.storeName = 'store name is needed';
+  }
+  if (Validator.isEmpty(req.body.userId)) {
+    errors.userId = 'user ID is needed';
   }
   if (!isEmpty(errors)) {
     return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });

@@ -1,4 +1,4 @@
-import {Types} from 'mongoose';
+import { Types } from 'mongoose';
 
 export interface CreateProductIProps {
     name: string;
@@ -10,5 +10,17 @@ export interface CreateProductIProps {
     state: string;
     contact: string;
     userId: Types.ObjectId,
-    image: string;
+    image: [];
+    storeId: Types.ObjectId,
+    inStock?: boolean, 
+}
+
+export enum CategoriesIProps {
+    "Office Equipment",
+    "Furniture",
+    "Medical",
+    "Food and Beverage",
+    "Cosmetics",
+    "Phones / Computers ",
+    "Electronics"
 }

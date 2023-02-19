@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { CreateProductIProps } from '../types/product';
+import { CreateProductIProps, CategoriesIProps  } from '../types/product';
 
 const productSchema = new mongoose.Schema<CreateProductIProps>(
     {
@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema<CreateProductIProps>(
         },
         category: {
             type: String,
+            enum: CategoriesIProps,
             required: true,
         },
         price: {
@@ -32,8 +33,8 @@ const productSchema = new mongoose.Schema<CreateProductIProps>(
             required: true,
         },
         image: {
-            type: String,
-            required: true,
+            type: [],
+            
         },
         contact: {
             type: String,
@@ -42,6 +43,14 @@ const productSchema = new mongoose.Schema<CreateProductIProps>(
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
+        },
+        storeId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Store',
+        },
+        inStock: {
+            type: Boolean,
+            default: true,
         },
     },
     { timestamps: true },
