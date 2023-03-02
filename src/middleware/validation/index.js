@@ -74,7 +74,22 @@ export const createStoreValidation = (req, res, next) => {
     errors.storeName = 'store name is needed';
   }
   if (Validator.isEmpty(req.body.userId)) {
-    errors.userId = 'user ID is needed';
+    errors.userId = 'user Id is needed';
+  }
+  if (!isEmpty(errors)) {
+    return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
+  } else {
+    next();
+  }
+};
+
+export const transferProductToStoreValidation = (req, res, next) => {
+  let errors = {};
+  if (Validator.isEmpty(req.body.storeId)) {
+    errors.storeId = 'store id is needed';
+  }
+  if (Validator.isEmpty(req.body.productId)) {
+    errors.productId = 'product Id is needed';
   }
   if (!isEmpty(errors)) {
     return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
