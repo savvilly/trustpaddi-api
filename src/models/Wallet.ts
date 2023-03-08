@@ -3,18 +3,16 @@ import { CreateWalletProps } from '../types/wallet';
 
 const walletSchema = new mongoose.Schema<CreateWalletProps>(
   {
-    totalAmount: {
+    withdrawableAmount: {
       type: Number,
       required: true,
     },
-    withdrawalAmount: {
+
+    amountInTrust: {
       type: Number,
       required: true,
     },
-    trustAmount: {
-      type: Number,
-      required: true,
-    },
+    
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
