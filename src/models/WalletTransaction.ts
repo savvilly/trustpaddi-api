@@ -1,5 +1,7 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Model } from 'mongoose';
 import { CreateWalletTransactionProps } from '../types/wallet-transaction';
+
+type WalletTransactionModel = Model<CreateWalletTransactionProps>;
 
 const walletTransactionSchema = new Schema<CreateWalletTransactionProps>(
   {
@@ -14,9 +16,19 @@ const walletTransactionSchema = new Schema<CreateWalletTransactionProps>(
       required: true,
     },
 
+    amountInTrust: {
+      type: Number,
+      required: true,
+    },
+
     type: {
       type: String,
       required: true,
+    },
+
+    inTrust: {
+      type: Boolean,
+      default: false,
     },
 
     purpose: {
@@ -39,4 +51,5 @@ const walletTransactionSchema = new Schema<CreateWalletTransactionProps>(
   { timestamps: true },
 );
 
-export default mongoose.model('WalletTransaction', walletTransactionSchema);
+
+export default mongoose.model<CreateWalletTransactionProps, WalletTransactionModel>('WalletTransaction', walletTransactionSchema)

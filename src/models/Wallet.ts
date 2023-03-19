@@ -1,9 +1,11 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Model } from 'mongoose';
 import { CreateWalletProps } from '../types/wallet';
+
+type WalletModel = Model<CreateWalletProps>;
 
 const walletSchema = new Schema<CreateWalletProps>(
   {
-    withdrawableAmount: {
+    balance: {
       type: Number,
       required: true,
       min: 0,
@@ -25,7 +27,7 @@ const walletSchema = new Schema<CreateWalletProps>(
 );
 
 walletSchema.virtual('totalAmount').get(function () {
-  return this.withdrawableAmount + this.amountInTrust;
+  return this.balance + this.amountInTrust;
 });
 
-export default mongoose.model('Wallet', walletSchema);
+export default mongoose.model<CreateWalletProps, WalletModel>('Wallet', walletSchema)
