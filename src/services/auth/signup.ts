@@ -43,9 +43,8 @@ export const signupUser = async (req: Request, res: Response) => {
       User.create(newUser);
       const wallet: CreateWalletProps = {
         userId: newUser._id,
-        totalAmount: 0,
-        withdrawalAmount: 0,
-        trustAmount: 0,
+        balance: 0,
+        amountInTrust: 0,
       };
 
       createUserWallet(wallet)

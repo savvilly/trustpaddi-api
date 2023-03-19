@@ -2,7 +2,7 @@ import {Types} from 'mongoose';
 
 export interface CreateWalletProps {
     userId: Types.ObjectId,
-    withdrawableAmount: number,
+    balance: number,
     amountInTrust: number,
 }
 export interface GetWalletProps {

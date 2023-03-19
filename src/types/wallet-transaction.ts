@@ -5,8 +5,10 @@ export interface CreateWalletTransactionProps {
     walletId: Types.ObjectId,
     amount: number,
     balance: number,
+    amountInTrust: number;
     type: string,
-    purpose: string
+    purpose: string,
+    inTrust: Boolean,
 }
 export interface GetWalletTransactionProps {
       userId: Types.ObjectId,
