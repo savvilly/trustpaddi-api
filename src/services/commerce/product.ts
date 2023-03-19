@@ -36,7 +36,6 @@ export const updateProduct = (req: Request, res: Response) => {
     })
 }
 
-
 export const getAllProducts = async (req: Request, res: Response) => {
     const { storeId } = req.params
     try {
@@ -47,6 +46,19 @@ export const getAllProducts = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });
     }
+}
+
+export const getSingleProductById = async (req: Request, res: Response) => {
+    const { productId } = req.params
+    Product.findById({ _id: productId }, async (err: unknown, data: unknown) => {
+        if (data === null || !data) {
+            return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `product id ${productId} not found`, success: false });
+        } else if (err) {
+            return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: err, success: false });
+        } else {
+            return res.status(SUCCESS).json({ status: SUCCESS, message: 'Product updated', success: true, payload: data});
+        }
+    })
 }
 
 export const deleteProduct = (req: Request, res: Response) => {
