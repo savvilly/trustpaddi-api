@@ -87,3 +87,4 @@ export const transferProductToStore = (req: Request, res: Response) => {
         }
     })
 }
+
