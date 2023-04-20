@@ -107,7 +107,7 @@ export const requestResetPasswordValidation = (req, res, next) => {
   }
 
   if (!isEmpty(errors)) {
-        return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
+    return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
   }
 
   next();
@@ -138,7 +138,47 @@ export const resetPasswordValidation = (req, res, next) => {
   }
 
   if (!isEmpty(errors)) {
-        return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
+    return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
+  }
+
+  next();
+};
+
+export const editStoreValidation = (req, res, next) => {
+  const errors = {};
+  const { storeName, logo, storeId } = req.body;
+
+  if (storeName === undefined || Validator.isEmpty(req.body.storeName)) {
+    errors.storeName = 'The store name field is required.';
+  }
+  if (logo === undefined || Validator.isEmpty(req.body.logo)) {
+    errors.logo = 'The logo field is required.';
+  }
+  if (storeId === undefined || Validator.isEmpty(req.body.storeId)) {
+    errors.storeId = 'The storeId is required.';
+  }
+
+  if (!isEmpty(errors)) {
+    return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
+  }
+
+  next();
+};
+
+export const updateStoreStatusValidation = (req, res, next) => {
+  const errors = {};
+  const { active, storeId } = req.body;
+
+  if (active === undefined || Validator.isEmpty(req.body.active)) {
+    errors.active = 'The active field is required.';
+  }
+
+  if (storeId === undefined || Validator.isEmpty(req.body.storeId)) {
+    errors.storeId = 'The storeId is required.';
+  }
+
+  if (!isEmpty(errors)) {
+    return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
   }
 
   next();

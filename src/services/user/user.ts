@@ -3,7 +3,7 @@ import User from '../../models/User';
 import { UserProps } from '../../types/user';
 import { NOT_CREATED, CREATED, SERVER_ERROR, SUCCESS } from '../../utils/statusCode';
 
-export const updateProfile = async (req: Request, res: Response) => {
+export const updateProfile = async (req: Request, res: Response): Promise<Response> => {
 	try {
 		const { _id, firstname, lastname, email, password, referral_code, avatar, phone, country, state, address, lga, bankAccount, bankAccountName, bankName } = req.body
 		let data = { firstname, lastname, email, password, referral_code, avatar, phone, country, state, address, lga, bankAccount, bankAccountName, bankName }

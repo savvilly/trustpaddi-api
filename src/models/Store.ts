@@ -20,8 +20,14 @@ const StoreSchema = new mongoose.Schema<CreateStoreIProps>(
             default: Date.now,
         },
         logo: {
-            type: String,
-            default: ""
+            url: {
+                type: String,
+                default: ""
+            },
+            public_id: {
+                type: String,
+                default: ""
+            }
         },
     }
 )
