@@ -1,16 +1,10 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import { CreateWalletTransactionProps } from '../types/wallet-transaction';
+import { CreateWalletTransactionProps, TransactionTypeEnum, TypeEnum } from '../types/wallet-transaction';
 
 type WalletTransactionModel = Model<CreateWalletTransactionProps>;
 
 const walletTransactionSchema = new Schema<CreateWalletTransactionProps>(
   {
-    amount: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-
     balance: {
       type: Number,
       required: true,
@@ -21,17 +15,19 @@ const walletTransactionSchema = new Schema<CreateWalletTransactionProps>(
       required: true,
     },
 
+    transactionType: {
+      type: String,
+      enum: Object.values(TransactionTypeEnum),
+      required: true
+    },
+
     type: {
       type: String,
+      enum: Object.values(TypeEnum),
       required: true,
     },
 
-    inTrust: {
-      type: Boolean,
-      default: false,
-    },
-
-    purpose: {
+    description: {
       type: String,
       required: true,
     },
@@ -41,15 +37,8 @@ const walletTransactionSchema = new Schema<CreateWalletTransactionProps>(
       ref: 'User',
       index: true,
     },
-
-    walletId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Wallet',
-      index: true,
-    },
   },
   { timestamps: true },
 );
 
-
-export default mongoose.model<CreateWalletTransactionProps, WalletTransactionModel>('WalletTransaction', walletTransactionSchema)
+export default mongoose.model<CreateWalletTransactionProps, WalletTransactionModel>('WalletTransaction', walletTransactionSchema);
