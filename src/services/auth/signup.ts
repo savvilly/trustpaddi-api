@@ -6,6 +6,7 @@ import User from '../../models/User';
 import { NOT_CREATED, CREATED, SERVER_ERROR } from '../../utils/statusCode';
 import { UserProps } from '../../types/user';
 import AxiosInstance from '../../utils/axiosCall'
+import { generateCustomerCode } from '../../utils/user';
 
 export const signupUser = async (req: Request, res: Response) => {
   try {
@@ -17,6 +18,8 @@ export const signupUser = async (req: Request, res: Response) => {
       return res.status(NOT_CREATED).json({ status: NOT_CREATED, message: 'account already exist', success: false });
     } else {
       const hashPassword = await bcrypt.hash(password, 10);
+      const customerCode = await generateCustomerCode(firstName);
+
       const newUser: UserProps = {
         _id: new mongoose.Types.ObjectId(),
         firstName,
@@ -31,11 +34,8 @@ export const signupUser = async (req: Request, res: Response) => {
         state: null,
         lga: null,
         bankAccount: null, bankAccountName: null, bankName: null,
-        customerCode: `${lastName}-${crypto
-          .randomBytes(Math.ceil(5 / 2))
-          .toString('hex')
-          .slice(0, 5)
-          .toUpperCase()}`,
+        customerCode,
+        walletPin: null
       };
 
       User.create(newUser);
