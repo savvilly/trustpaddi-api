@@ -26,7 +26,7 @@ export const siginUser = async (req: Request, res: Response) => {
           status: SUCCESS,
           message: 'success',
           success: true,
-          playload: {
+          payload: {
             userInfo: new UserDTO(user),
             token: token
           },

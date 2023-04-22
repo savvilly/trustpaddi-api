@@ -5,8 +5,6 @@ import bcrypt from 'bcrypt';
 import User from '../../models/User';
 import { NOT_CREATED, CREATED, SERVER_ERROR } from '../../utils/statusCode';
 import { UserProps } from '../../types/user';
-import { CreateWalletProps } from '../../types/wallet';
-import { createUserWallet } from '../user/wallet';
 import AxiosInstance from '../../utils/axiosCall'
 
 export const signupUser = async (req: Request, res: Response) => {
@@ -41,13 +39,6 @@ export const signupUser = async (req: Request, res: Response) => {
       };
 
       User.create(newUser);
-      const wallet: CreateWalletProps = {
-        userId: newUser._id,
-        balance: 0,
-        amountInTrust: 0,
-      };
-
-      createUserWallet(wallet)
       return res.status(CREATED).json({ status: CREATED, message: 'Account created', success: true });
     }
   } catch (error) {
