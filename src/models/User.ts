@@ -69,6 +69,9 @@ const UserSchema = new mongoose.Schema<UserProps>(
     active: {
       type: Boolean,
       default: true,
+    },
+    walletPin: {
+      type: String
     }
   },
   { timestamps: true },
