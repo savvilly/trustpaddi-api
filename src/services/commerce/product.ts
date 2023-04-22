@@ -4,9 +4,9 @@ import { SUCCESS, CREATED, SERVER_ERROR, BAD_REQUEST } from '../../utils/statusC
 import { CreateProductIProps } from '../../types/product';
 
 export const createProduct = async (req: Request, res: Response) => {
-    const { name, category, price, description, address, city, state, contact, image, userId, storeId } = req.body;
+    const { name, category, price, description, address, city, state, contact, image, userId, storeId, draft, inStock } = req.body;
     const newProduct: CreateProductIProps = {
-        storeId, name, category, price, description, address, city, state, contact, image, userId
+        storeId, name, category, price, description, address, city, state, contact, image, userId, draft, inStock
     }
     try {
         const result = await Product.create(newProduct)
@@ -19,10 +19,9 @@ export const createProduct = async (req: Request, res: Response) => {
 }
 
 export const updateProduct = (req: Request, res: Response) => {
-    const { productId } = req.params
-    const { name, category, price, description, address, city, state, contact, image, userId, storeId } = req.body;
+    const { name, category, price, description, address, city, state, contact, image, userId,  draft, inStock, productId } = req.body;
     const editedProduct: CreateProductIProps = {
-        storeId, name, category, price, description, address, city, state, contact, image, userId
+      name, category, price, description, address, city, state, contact, image, userId, draft, inStock
     }
     Product.findOneAndUpdate({ _id: productId }, editedProduct, async (err: unknown, data: unknown) => {
         if (data === null || !data) {
@@ -36,7 +35,19 @@ export const updateProduct = (req: Request, res: Response) => {
     })
 }
 
-export const getAllProducts = async (req: Request, res: Response) => {
+export const getAllProductsVendor = async (req: Request, res: Response) => {
+    const { storeId } = req.params
+    try {
+        const result = await Product.find({ storeId: storeId })
+        if (result) {
+            return res.status(SUCCESS).json({ status: SUCCESS, message: 'ok', success: true, payload: result });
+        }
+    } catch (error) {
+        return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });
+    }
+}
+
+export const getAllProductUser   = async (req: Request, res: Response) => {
     const { storeId } = req.params
     try {
         const result = await Product.find({ storeId })
@@ -56,7 +67,7 @@ export const getSingleProductById = async (req: Request, res: Response) => {
         } else if (err) {
             return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: err, success: false });
         } else {
-            return res.status(SUCCESS).json({ status: SUCCESS, message: 'Product updated', success: true, payload: data});
+            return res.status(SUCCESS).json({ status: SUCCESS, message: 'Product updated', success: true, payload: data });
         }
     })
 }

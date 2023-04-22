@@ -11,8 +11,9 @@ export interface CreateProductIProps {
     contact: string;
     userId: Types.ObjectId,
     image: [];
-    storeId: Types.ObjectId,
+    storeId?: Types.ObjectId,
     inStock?: boolean, 
+    draft?: boolean,
 }
 
 export enum CategoriesIProps {
