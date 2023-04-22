@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import User from '../../models/User';
 import { UserProps } from '../../types/user';
-import { NOT_CREATED, CREATED, SERVER_ERROR, SUCCESS } from '../../utils/statusCode';
+import { NOT_CREATED, CREATED, SERVER_ERROR, SUCCESS, FORBIDDEN } from '../../utils/statusCode';
+import bcrypt from 'bcrypt';
 
 export const updateProfile = async (req: Request, res: Response): Promise<Response> => {
 	try {
@@ -57,3 +58,27 @@ export const subDeleteUserAccount = async (req: Request, res: Response) => {
 		return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });
 	}
 }
+
+/**
+ * Update wallet PIN for a user.
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @returns {Response}
+ */
+export const updateWalletPin = async (req: Request, res: Response): Promise<Response>  => {
+	const userId = req.user.userId;
+	const walletPin = req.body.wallet_pin;
+
+	try {
+	  	const user = await User.findById(userId);
+		const walletPinString = walletPin.toString();
+		const hashedWalletPin = await bcrypt.hash(walletPinString, 10);
+		user.walletPin = hashedWalletPin;
+		await user.save();
+
+		return res.status(SUCCESS).json({ status: SUCCESS, message: 'Wallet PIN set successfully', success: true });
+	} catch (error) {
+	  return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });
+	}
+};

@@ -20,7 +20,8 @@ export interface UserProps {
     createdAt?: Date
     bankAccount: string;
     bankAccountName: string
-    bankName: string
+    bankName: string,
+    walletPin: string
 }
 
 export interface SignInProps {
@@ -48,6 +49,7 @@ export class UserDTO {
     bankAccount: string;
     bankAccountName: string
     bankName: string
+    walletPin: string
 
     constructor(data: UserProps) {
         this._id = data._id
@@ -67,6 +69,6 @@ export class UserDTO {
         this.customerCode = data.customerCode
         this.isKYCVerified = data.isKYCVerified
         this.phone = data.phone
-
+        this.walletPin = data.walletPin
     }
 }
