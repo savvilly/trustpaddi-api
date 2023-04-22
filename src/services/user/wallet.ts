@@ -304,7 +304,7 @@ export const transferFunds = async (req: Request, res: Response): Promise<Respon
     const user = await User.findById(userId);
 
     // Check if user's wallet PIN is set
-    if (!user.walletPin) {
+    if (user.walletPin === null) {
       return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: 'Wallet PIN not set', success: false });
     }
 

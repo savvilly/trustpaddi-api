@@ -40,7 +40,7 @@ const walletTransactionsSchema = Joi.object({
     'string.empty': 'Type must be a string',
   }),  
   transaction_type: Joi.string().optional().messages({
-    'string.empty': 'Type must be a string',
+    'string.empty': 'Transaction type must be a string',
   }),
 });
 
