@@ -5,12 +5,16 @@ import { CreateStoreIProps } from '../../types/store';
 import { useCloudinaryUplaod } from '../../utils/useCloudinary';
 
 export const createStore = async (req: Request, res: Response): Promise<Response> => {
-    const { storeName, logo, userId } = req.body;
+    const { storeName, logo } = req.body
+    const userId = req.user.userId
+
     try {
+        //checking if user already has a store created
         const store = await Store.findOne({ userId: userId })
         if (store) {
             return res.status(NOT_CREATED).json({ status: NOT_CREATED, message: "User already has a store", success: false });
         }
+
         const cloudLogo = await useCloudinaryUplaod(logo)
         const newStore: CreateStoreIProps = {
             storeName, logo: { url: `${cloudLogo.secure_url}`, public_id: `${cloudLogo.public_id}` }, userId
@@ -27,11 +31,14 @@ export const createStore = async (req: Request, res: Response): Promise<Response
 
 export const editStore = async (req: Request, res: Response): Promise<Response> => {
     const { storeName, logo, storeId } = req.body;
+    const userId = req.user.userId
+
     try {
-        const storeData = await Store.findById({ _id: storeId })
-        if (!storeData) {
-            return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `No store found for ${storeId}`, success: false });
+        const store = await Store.findOne({ _id: storeId, userId: userId })
+        if (!store) {
+            return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `No store found for ${storeId} or access denied`, success: false });
         }
+
         const cloudLogo = await useCloudinaryUplaod(logo)
         const uploadData = { storeName, logo: { url: `${cloudLogo.secure_url}`, public_id: `${cloudLogo.public_id}` } }
         const updateStoreResult = await Store.findByIdAndUpdate({ _id: storeId }, uploadData)
@@ -45,10 +52,12 @@ export const editStore = async (req: Request, res: Response): Promise<Response> 
 
 export const updateStoreStatus = async (req: Request, res: Response): Promise<Response> => {
     const { active, storeId } = req.body;
+    const userId = req.user.userId
+
     try {
-        const storeData = await Store.findById({ _id: storeId })
-        if (!storeData) {
-            return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `No store found for ${storeId}`, success: false });
+        const store = await Store.findOne({ _id: storeId, userId: userId })
+        if (!store) {
+            return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `No store found for ${storeId} or access denied`, success: false });
         }
         const updateStoreResult = await Store.findByIdAndUpdate({ _id: storeId }, { active: active })
         if (updateStoreResult) {

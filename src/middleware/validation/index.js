@@ -73,9 +73,6 @@ export const createStoreValidation = (req, res, next) => {
   if (Validator.isEmpty(req.body.storeName)) {
     errors.storeName = 'store name is needed';
   }
-  if (Validator.isEmpty(req.body.userId)) {
-    errors.userId = 'user Id is needed';
-  }
   if (!isEmpty(errors)) {
     return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
   } else {
@@ -153,9 +150,6 @@ export const editStoreValidation = (req, res, next) => {
   }
   if (logo === undefined || Validator.isEmpty(req.body.logo)) {
     errors.logo = 'The logo field is required.';
-  }
-  if (storeId === undefined || Validator.isEmpty(req.body.storeId)) {
-    errors.storeId = 'The storeId is required.';
   }
 
   if (!isEmpty(errors)) {
