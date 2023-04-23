@@ -53,7 +53,6 @@ export const editStore = async (req: Request, res: Response): Promise<Response> 
 export const updateStoreStatus = async (req: Request, res: Response): Promise<Response> => {
     const { active, storeId } = req.body;
     const userId = req.user.userId
-
     try {
         const store = await Store.findOne({ _id: storeId, userId: userId })
         if (!store) {

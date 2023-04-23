@@ -46,9 +46,6 @@ export const createProductValidation = (req, res, next) => {
   if (Validator.isEmpty(req.body.contact)) {
     errors.contact = 'seller contact is needed ';
   }
-  if (Validator.isEmpty(req.body.userId)) {
-    errors.userId = 'userId  is needed ';
-  }
   if (Validator.isEmpty(req.body.city)) {
     errors.city = 'city is needed is needed';
   }
@@ -150,6 +147,9 @@ export const editStoreValidation = (req, res, next) => {
   }
   if (logo === undefined || Validator.isEmpty(req.body.logo)) {
     errors.logo = 'The logo field is required.';
+  }
+  if (storeId === undefined || Validator.isEmpty(req.body.storeId)) {
+    errors.storeId = 'The storeId is required.';
   }
 
   if (!isEmpty(errors)) {

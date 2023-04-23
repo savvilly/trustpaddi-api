@@ -2,7 +2,7 @@ import { Router } from 'express';
 const commerceRouter = Router();
 import checkAuth from '../middleware/checkAuth';
 import { createStore, getAllStores, getSingleStoreById, editStore, updateStoreStatus } from '../services/commerce/store';
-import { createProduct, updateProduct, deleteProduct, getAllProductsVendor , transferProductToStore, getSingleProductById, } from '../services/commerce/product';
+import { createProduct, updateProduct, deleteProduct, getAllProductsVendor ,getAllProductUser ,  transferProductToStore, getSingleProductByIdVendor, } from '../services/commerce/product';
 import { createProductValidation, createStoreValidation, transferProductToStoreValidation, updateStoreStatusValidation, editStoreValidation } from "../middleware/validation/index"
 
 // PRODUCT
@@ -10,7 +10,8 @@ commerceRouter.post('/vendor/create_product', checkAuth, createProductValidation
 commerceRouter.patch('/vendor/update_product', checkAuth, createProductValidation, updateProduct);
 commerceRouter.delete('/vendor/delete_product/:productId', checkAuth, deleteProduct);
 commerceRouter.get('/vendor/get_store_products/:storeId',checkAuth, getAllProductsVendor );
-commerceRouter.get('/vendor/get_single_product/:productId', getSingleProductById);
+commerceRouter.get('/user/get_store_products/:storeId',checkAuth, getAllProductUser  );
+commerceRouter.get('/vendor/get_single_product/:productId', getSingleProductByIdVendor);
 commerceRouter.patch('/commerce_transfer_product_to_store', checkAuth, transferProductToStoreValidation, transferProductToStore);
 
 //STORE
