@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import Product from '../../models/Product';
 import { SUCCESS, CREATED, SERVER_ERROR, BAD_REQUEST } from '../../utils/statusCode';
 import { CreateProductIProps } from '../../types/product';
+import User from '../../models/User';
 
 export const createProduct = async (req: Request, res: Response) => {
     const { name, category, price, description, address, city, state, contact, image, storeId, draft, inStock } = req.body;
@@ -54,10 +55,46 @@ export const deleteProduct = (req: Request, res: Response) => {
 }
 
 
+export const setProductStockStatus = async (req: Request, res: Response): Promise<Response> => {
+    const { productId, inStock } = req.body
+    const userId = req.user.userId
+    try {
+        const product = await Product.findOne({ _id: productId, userId: userId })
+        if (!product) {
+            return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `No product found for ${productId} or access denied`, success: false });
+        }
+        const updatedProduct = await Product.findByIdAndUpdate({ _id: productId }, { inStock: inStock })
+        if (updatedProduct) {
+            return res.status(CREATED).json({ status: CREATED, message: 'Product in-stock updated', success: true });
+        }
+    } catch (error) {
+        return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });
+    }
+}
+
+
+export const setProductDraft = async (req: Request, res: Response): Promise<Response> => {
+    const { productId, draft } = req.body
+    const userId = req.user.userId
+    try {
+        const product = await Product.findOne({ _id: productId, userId: userId })
+        if (!product) {
+            return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `No product found for ${productId} or access denied`, success: false });
+        }
+        const updatedProduct = await Product.findByIdAndUpdate({ _id: productId }, { draft: draft })
+        if (updatedProduct) {
+            return res.status(CREATED).json({ status: CREATED, message: 'Product draft updated', success: true });
+        }
+    } catch (error) {
+        return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });
+    }
+}
+
+
 export const getAllProductsVendor = async (req: Request, res: Response) => {
     const { storeId } = req.params
     const userId = req.user.userId
-    Product.find({ storeId: storeId, userId: userId}, async (err: unknown, data: unknown) => {
+    Product.find({ storeId: storeId, userId: userId }, async (err: unknown, data: unknown) => {
         if (data === null || !data) {
             return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `store id ${storeId} not found or access denied`, success: false });
         } else if (err) {
@@ -81,7 +118,8 @@ export const getAllProductUser = async (req: Request, res: Response): Promise<Re
 
 export const getSingleProductByIdVendor = async (req: Request, res: Response) => {
     const { productId } = req.params
-    Product.findById({ _id: productId }, async (err: unknown, data: unknown) => {
+    const userId = req.user.userId
+    Product.findOne({ _id: productId, userId: userId }, async (err: unknown, data: unknown) => {
         if (data === null || !data) {
             return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `product id ${productId} not found`, success: false });
         } else if (err) {
@@ -94,7 +132,7 @@ export const getSingleProductByIdVendor = async (req: Request, res: Response) =>
 
 export const getSingleProductByIdUser = async (req: Request, res: Response) => {
     const { productId } = req.params
-    Product.findById({ _id: productId, draft: false }, async (err: unknown, data: unknown) => {
+    Product.findOne({ _id: productId, draft: false }, async (err: unknown, data: unknown) => {
         if (data === null || !data) {
             return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `product id ${productId} not found or product not available but in draft`, success: false });
         } else if (err) {
