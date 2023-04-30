@@ -180,7 +180,7 @@ export const updateStoreStatusValidation = (req, res, next) => {
 
 export const updateProductStatusValidation = (req, res, next) => {
   const errors = {};
-  const { inStock, productId} = req.body;
+  const { inStock, productId } = req.body;
 
   if (inStock === undefined || Validator.isEmpty(req.body.inStock)) {
     errors.inStock = 'The inStock field is required.';
@@ -197,19 +197,51 @@ export const updateProductStatusValidation = (req, res, next) => {
   next();
 };
 
-
 export const updateProductDraftValidation = (req, res, next) => {
   const errors = {};
-  const { draft, productId} = req.body;
+  const { draft, productId } = req.body;
 
-  if ( draft === undefined || Validator.isEmpty(req.body.draft)) {
-    errors.inStock = 'The inStock field is required.';
+  if (draft === undefined || Validator.isEmpty(req.body.draft)) {
+    errors.draft = 'The draft field is required.';
   }
 
   if (productId === undefined || Validator.isEmpty(req.body.productId)) {
     errors.productId = 'The productId is required.';
   }
 
+  if (!isEmpty(errors)) {
+    return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
+  }
+
+  next();
+};
+
+export const createCategoryValidation  = (req, res, next) => {
+  const errors = {};
+  const { name } = req.body;
+
+  if (name === undefined || Validator.isEmpty(req.body.name)) {
+    errors.name = 'The name field is required.';
+  }
+
+  if (!isEmpty(errors)) {
+    return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
+  }
+
+  next();
+};
+
+export const updateCategoryValidation = (req, res, next) => {
+  const errors = {};
+  const { name, categoryId } = req.body;
+
+  if (name === undefined || Validator.isEmpty(req.body.name)) {
+    errors.name = 'The name field is required.';
+  }
+
+  if (categoryId === undefined || Validator.isEmpty(req.body.categoryId)) {
+    errors.name = 'The categoryId field is required.';
+  }
   if (!isEmpty(errors)) {
     return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: errors, success: false });
   }

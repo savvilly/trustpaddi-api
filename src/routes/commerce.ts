@@ -3,11 +3,13 @@ const commerceRouter = Router();
 import checkAuth from '../middleware/checkAuth';
 import { createStore, getAllStores, getSingleStoreById, editStore, updateStoreStatus } from '../services/commerce/store';
 import { createProduct, updateProduct, deleteProduct, getAllProductsVendor, getAllProductUser, transferProductToStore, getSingleProductByIdVendor, getSingleProductByIdUser, setProductStockStatus, setProductDraft } from '../services/commerce/product';
-import { createProductValidation, createStoreValidation, updateProductDraftValidation, updateStoreStatusValidation, editStoreValidation, updateProductStatusValidation } from "../middleware/validation/index"
+import { createProductValidation, createStoreValidation, updateProductDraftValidation, updateStoreStatusValidation, editStoreValidation, updateProductStatusValidation, createCategoryValidation, updateCategoryValidation } from "../middleware/validation/index"
+import { createCategory, updateCategory, getAllCategory } from '../services/commerce/category';
 
 // PRODUCT USER
 commerceRouter.get('/user/get_store_products/:storeId', checkAuth, getAllProductUser);
 commerceRouter.get('/user/get_single_product/:productId', getSingleProductByIdUser);
+commerceRouter.get('/user/get_all_category', getAllCategory)
 
 // PRODUCT VENDOR
 commerceRouter.post('/vendor/create_product', checkAuth, createProductValidation, createProduct);
@@ -27,5 +29,8 @@ commerceRouter.patch('/vendor/edit_store', checkAuth, editStoreValidation, editS
 //STORE ADMIN
 commerceRouter.patch('/admin/update_store_status', checkAuth, updateStoreStatusValidation, updateStoreStatus);
 commerceRouter.get('/admin/get_all_stores', checkAuth, getAllStores)
+commerceRouter.post('/admin/create_category', checkAuth, createCategoryValidation, createCategory)
+commerceRouter.patch('/admin/update_category', checkAuth, updateCategoryValidation, updateCategory)
+
 
 export default commerceRouter;

@@ -15,10 +15,6 @@ const StoreSchema = new mongoose.Schema<CreateStoreIProps>(
             type: Boolean,
             default: true,
         },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        },
         logo: {
             url: {
                 type: String,
@@ -29,7 +25,9 @@ const StoreSchema = new mongoose.Schema<CreateStoreIProps>(
                 default: ""
             }
         },
-    }
+        
+    },
+    { timestamps: true },
 )
 
 export default mongoose.model('Store', StoreSchema)

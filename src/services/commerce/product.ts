@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import Product from '../../models/Product';
 import { SUCCESS, CREATED, SERVER_ERROR, BAD_REQUEST } from '../../utils/statusCode';
 import { CreateProductIProps } from '../../types/product';
-import User from '../../models/User';
 
 export const createProduct = async (req: Request, res: Response) => {
     const { name, category, price, description, address, city, state, contact, image, storeId, draft, inStock } = req.body;
