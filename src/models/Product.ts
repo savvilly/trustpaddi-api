@@ -51,6 +51,10 @@ const productSchema = new mongoose.Schema<CreateProductIProps>(
             type: Boolean,
             default: true,
         },
+        draft: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true },
 );

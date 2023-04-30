@@ -2,22 +2,35 @@ import { Router } from 'express';
 const commerceRouter = Router();
 import checkAuth from '../middleware/checkAuth';
 import { createStore, getAllStores, getSingleStoreById, editStore, updateStoreStatus } from '../services/commerce/store';
-import { createProduct, updateProduct, deleteProduct, getAllProducts, transferProductToStore, getSingleProductById, } from '../services/commerce/product';
-import { createProductValidation, createStoreValidation, transferProductToStoreValidation, updateStoreStatusValidation, editStoreValidation } from "../middleware/validation/index"
+import { createProduct, updateProduct, deleteProduct, getAllProductsVendor, getAllProductUser, transferProductToStore, getSingleProductByIdVendor, getSingleProductByIdUser, setProductStockStatus, setProductDraft } from '../services/commerce/product';
+import { createProductValidation, createStoreValidation, updateProductDraftValidation, updateStoreStatusValidation, editStoreValidation, updateProductStatusValidation, createCategoryValidation, updateCategoryValidation } from "../middleware/validation/index"
+import { createCategory, updateCategory, getAllCategory } from '../services/commerce/category';
 
-// PRODUCT
+// PRODUCT USER
+commerceRouter.get('/user/get_store_products/:storeId', checkAuth, getAllProductUser);
+commerceRouter.get('/user/get_single_product/:productId', getSingleProductByIdUser);
+commerceRouter.get('/user/get_all_category', getAllCategory)
+
+// PRODUCT VENDOR
 commerceRouter.post('/vendor/create_product', checkAuth, createProductValidation, createProduct);
-commerceRouter.put('/vendor/commerce_update_product/:productId', checkAuth, createProductValidation, updateProduct);
-commerceRouter.delete('/vendor/commerce_delete_product/:productId', checkAuth, deleteProduct);
-commerceRouter.get('/commerce_get_store_products/:storeId', getAllProducts);
-commerceRouter.get('/commerce_get_single_product/:productId', getSingleProductById);
-commerceRouter.patch('/commerce_transfer_product_to_store', checkAuth, transferProductToStoreValidation, transferProductToStore);
+commerceRouter.patch('/vendor/update_product', checkAuth, createProductValidation, updateProduct);
+commerceRouter.delete('/vendor/delete_product/:productId', checkAuth, deleteProduct);
+commerceRouter.get('/vendor/get_store_products/:storeId', checkAuth, getAllProductsVendor);
+commerceRouter.get('/vendor/get_single_product/:productId', checkAuth, getSingleProductByIdVendor);
+commerceRouter.patch('/vendor/upadte_product_instock_status', checkAuth, updateProductStatusValidation, setProductStockStatus);
+commerceRouter.patch('/vendor/upadte_product_draft', checkAuth, updateProductDraftValidation, setProductDraft);
 
-//STORE
+//STORE VENDOR
 commerceRouter.post('/vendor/create_store', checkAuth, createStoreValidation, createStore);
-commerceRouter.get('/vendor/get_store/:storeId', getSingleStoreById);
+commerceRouter.get('/vendor/get_store/:storeId', checkAuth, getSingleStoreById);
 commerceRouter.patch('/vendor/edit_store', checkAuth, editStoreValidation, editStore);
+
+
+//STORE ADMIN
 commerceRouter.patch('/admin/update_store_status', checkAuth, updateStoreStatusValidation, updateStoreStatus);
-commerceRouter.get('/admin/get_all_stores',checkAuth, getAllStores);
+commerceRouter.get('/admin/get_all_stores', checkAuth, getAllStores)
+commerceRouter.post('/admin/create_category', checkAuth, createCategoryValidation, createCategory)
+commerceRouter.patch('/admin/update_category', checkAuth, updateCategoryValidation, updateCategory)
+
 
 export default commerceRouter;

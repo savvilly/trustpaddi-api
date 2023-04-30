@@ -1,0 +1,3 @@
+interface CategoriesIProps {
+    name: string
+}
