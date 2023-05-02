@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import Product from '../../models/Product';
 import { SUCCESS, CREATED, SERVER_ERROR, BAD_REQUEST } from '../../utils/statusCode';
 import { CreateProductIProps } from '../../types/product';
+import pagination from '../../middleware/validation/pagination';
 
 export const createProduct = async (req: Request, res: Response) => {
     const { name, category, price, description, address, city, state, contact, image, storeId, draft, inStock } = req.body;
@@ -90,26 +91,42 @@ export const setProductDraft = async (req: Request, res: Response): Promise<Resp
 }
 
 
-export const getAllProductsVendor = async (req: Request, res: Response) => {
+export const getAllProductsVendor = async (req: Request, res: Response): Promise<Response> => {
     const { storeId } = req.params
+    const page = req.query.page
+    const limit = 5
     const userId = req.user.userId
-    Product.find({ storeId: storeId, userId: userId }, async (err: unknown, data: unknown) => {
-        if (data === null || !data) {
+    try {
+        const count = await Product.count()
+        const mongoQuery: any = Product.find({ storeId: storeId, userId: userId })
+        const mongoQueryCheck: any = await Product.find({ storeId: storeId, userId: userId })
+        if (mongoQueryCheck.length === 0) {
             return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `store id ${storeId} not found or access denied`, success: false });
-        } else if (err) {
-            return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: err, success: false });
-        } else {
-            return res.status(SUCCESS).json({ status: SUCCESS, message: 'ok', success: true, payload: data });
         }
-    })
+        const result = await pagination(mongoQuery, page, limit, count)
+        return res.status(SUCCESS).json({ status: SUCCESS, message: 'ok', success: true, payload: result });
+
+    } catch (err) {
+        return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: err, success: false });
+    }
 }
 
 
 export const getAllProductUser = async (req: Request, res: Response): Promise<Response> => {
     const { storeId } = req.params
+    const page = req.query.page
+    const limit = 5
     try {
-        const result = await Product.find({ storeId: storeId, draft: false })
-        return res.status(SUCCESS).json({ status: SUCCESS, message: 'ok', success: true, payload: result });
+        const count = await Product.count({draft: false })
+        const mongoQuery: any = Product.find({ storeId: storeId, draft: false })
+        const mongoQueryCheck: any = await Product.find({ storeId: storeId, draft: false })
+        if (mongoQueryCheck.length === 0) {
+            return res.status(BAD_REQUEST).json({ status: BAD_REQUEST, message: `store id ${storeId} not found or access denied`, success: false });
+        } else {
+            const result = await pagination(mongoQuery, page, limit, count)
+            return res.status(SUCCESS).json({ status: SUCCESS, message: 'ok', success: true, payload: result });
+        }
+
     } catch (error) {
         return res.status(SERVER_ERROR).json({ status: SERVER_ERROR, message: error, success: false });
     }
